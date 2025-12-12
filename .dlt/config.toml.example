@@ -1,0 +1,15 @@
+# dlt Configuration (non-secret settings)
+# Copy this file to config.toml
+
+[runtime]
+log_level = "INFO"
+# Set to "DEBUG" for detailed dlt logging during development
+
+[normalize]
+# Flatten nested JSON structures for easier SQL querying
+parquet_normalizer = {"max_table_nesting": 0}
+
+# Schema management
+# dlt will auto-create tables in the 'public' schema
+# SQL transformations should be built in 'staging' and 'analytics' schemas
+# See database/02_create_schemas.sql for schema descriptions
