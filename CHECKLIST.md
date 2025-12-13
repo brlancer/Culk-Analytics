@@ -14,14 +14,14 @@
 ## Phase 2: Data Extraction Implementation ⏳ TODO
 
 ### Shopify (Core Commerce: B2B + DTC)
-- [ ] Configure dlt REST API source for Shopify
-- [ ] Implement incremental loading with updated_at_min
-- [ ] Test extraction for orders endpoint
-- [ ] Test extraction for products endpoint
-- [ ] Test extraction for customers endpoint
-- [ ] Handle pagination (Link headers)
-- [ ] Add error handling and retries
-- [ ] Test full pipeline: extract → load → verify in database
+- [x] Configure dlt REST API source for Shopify
+- [x] Implement incremental loading with updated_at_min
+- [x] Test extraction for orders endpoint
+- [x] Test extraction for products endpoint
+- [x] Test extraction for customers endpoint
+- [x] Handle pagination (Link headers)
+- [x] Add error handling and retries
+- [x] Test full pipeline: extract → load → verify in database
 
 ### Faire (Wholesale)
 - [ ] Configure dlt REST API source for Faire
