@@ -6,7 +6,7 @@ Comprehensive overview of all data sources integrated into the Culk Analytics pl
 
 | Source Name | API Type | Rate Limits | Key Endpoints | Extraction Method | Notes |
 |------------|----------|-------------|---------------|-------------------|-------|
-| **Shopify** | REST API | 2-4 req/sec (plan-dependent) | `/admin/api/2024-01/orders.json`<br>`/admin/api/2024-01/products.json`<br>`/admin/api/2024-01/customers.json` | dlt REST API client | DTC sales channel. Incremental via `updated_at_min`. Link header pagination. |
+| **Shopify** | REST API | 2-4 req/sec (plan-dependent) | `/admin/api/2025-10/orders.json`<br>`/admin/api/2025-10/products.json`<br>`/admin/api/2025-10/customers.json` | dlt REST API client | Commerce hub for B2B + DTC; Faire orders sync into Shopify, then to ShipHero. Incremental via `updated_at_min`. Link header pagination. |
 | **Faire** | REST API | 1000 req/hour | `/api/v2/orders`<br>`/api/v2/products` | dlt REST API client | Wholesale orders. Page-based or cursor pagination. Filter by timestamps. |
 | **ShipHero** | GraphQL | 50k complexity/hour | `products { ... }`<br>`shipments { ... }`<br>`inventory_changes { ... }` | Custom extraction (aiohttp) → dlt | 3PL fulfillment & inventory. **Critical**: Monitor complexity usage. OAuth tokens expire - implement refresh. |
 | **Loop Returns** | REST API | Standard limits | `/api/v1/returns/list`<br>`/api/v1/returns/{id}` | dlt REST API client | Returns tracking. Incremental via timestamp filters. |

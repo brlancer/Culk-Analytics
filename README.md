@@ -24,7 +24,7 @@ This project follows the **ELT pattern**:
 
 ## Data Sources
 
-- Shopify (DTC sales)
+- Shopify (commerce hub for B2B + DTC)
 - Faire (wholesale orders)
 - ShipHero (3PL inventory & shipments)
 - Loop Returns (return tracking)

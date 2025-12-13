@@ -13,7 +13,7 @@
 
 ## Phase 2: Data Extraction Implementation ⏳ TODO
 
-### Shopify (DTC Sales)
+### Shopify (Core Commerce: B2B + DTC)
 - [ ] Configure dlt REST API source for Shopify
 - [ ] Implement incremental loading with updated_at_min
 - [ ] Test extraction for orders endpoint

@@ -55,7 +55,7 @@ def main():
     #     logger.error(f"Shopify load failed: {e}")
     
     # TODO: Add calls for all sources:
-    # - Shopify (DTC sales)
+    # - Shopify (commerce hub: B2B + DTC)
     # - Faire (wholesale orders)
     # - ShipHero (3PL inventory/shipments)
     # - Loop Returns (returns tracking)

@@ -17,7 +17,7 @@ culk-analytics/
 │   ├── ARCHITECTURE.md        # ELT architecture overview
 │   └── DATA_SOURCES.md        # API details and rate limits
 ├── 📂 ingestion/               # Data source extraction scripts
-│   ├── shopify.py             # Shopify DTC sales (REST)
+│   ├── shopify.py             # Shopify commerce hub (B2B + DTC) (REST)
 │   ├── faire.py               # Faire wholesale (REST)
 │   ├── shiphero.py            # ShipHero 3PL (GraphQL)
 │   ├── loop_returns.py        # Loop Returns (REST)
@@ -63,7 +63,7 @@ python run_pipeline.py
 
 | Source | Type | File |
 |--------|------|------|
-| Shopify (DTC) | REST | `ingestion/shopify.py` |
+| Shopify (Commerce Hub: B2B + DTC) | REST | `ingestion/shopify.py` |
 | Faire (Wholesale) | REST | `ingestion/faire.py` |
 | ShipHero (3PL) | GraphQL | `ingestion/shiphero.py` |
 | Loop Returns | REST | `ingestion/loop_returns.py` |
