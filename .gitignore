@@ -32,3 +32,6 @@ Thumbs.db
 # dlt pipeline data
 .dlt/.sources
 .dlt/.pipelines
+
+# Miscellaneous scripts
+scripts
