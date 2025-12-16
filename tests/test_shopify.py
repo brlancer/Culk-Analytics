@@ -15,21 +15,21 @@ class TestShopifyOrders:
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
                 WHERE table_schema = 'shopify_raw' 
-                AND table_name = 'shopify_orders_resource'
+                AND table_name = 'orders'
             );
         """)
-        assert db_cursor.fetchone()[0], "shopify_orders_resource table does not exist"
+        assert db_cursor.fetchone()[0], "orders table does not exist"
     
     def test_orders_has_data(self, db_cursor):
         """Verify orders table contains data."""
-        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.shopify_orders_resource;")
+        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.orders;")
         count = db_cursor.fetchone()[0]
-        assert count > 0, "shopify_orders_resource table is empty"
+        assert count > 0, "orders table is empty"
     
     def test_orders_no_null_ids(self, db_cursor):
         """Verify no orders have null IDs."""
         db_cursor.execute("""
-            SELECT COUNT(*) FROM shopify_raw.shopify_orders_resource 
+            SELECT COUNT(*) FROM shopify_raw.orders 
             WHERE id IS NULL;
         """)
         null_count = db_cursor.fetchone()[0]
@@ -39,7 +39,7 @@ class TestShopifyOrders:
         """Verify financial status values are valid."""
         db_cursor.execute("""
             SELECT DISTINCT financial_status 
-            FROM shopify_raw.shopify_orders_resource 
+            FROM shopify_raw.orders 
             WHERE financial_status IS NOT NULL;
         """)
         statuses = {row[0] for row in db_cursor.fetchall()}
@@ -53,7 +53,7 @@ class TestShopifyOrders:
     def test_orders_positive_prices(self, db_cursor):
         """Verify order prices are non-negative."""
         db_cursor.execute("""
-            SELECT COUNT(*) FROM shopify_raw.shopify_orders_resource 
+            SELECT COUNT(*) FROM shopify_raw.orders 
             WHERE CAST(total_price AS NUMERIC) < 0;
         """)
         negative_count = db_cursor.fetchone()[0]
@@ -65,7 +65,7 @@ class TestShopifyOrders:
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
                 WHERE table_schema = 'shopify_raw' 
-                AND table_name = 'shopify_orders_resource__line_items'
+                AND table_name = 'orders__line_items'
             );
         """)
         assert db_cursor.fetchone()[0], "line items table does not exist"
@@ -80,21 +80,21 @@ class TestShopifyProducts:
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
                 WHERE table_schema = 'shopify_raw' 
-                AND table_name = 'shopify_products_resource'
+                AND table_name = 'products'
             );
         """)
-        assert db_cursor.fetchone()[0], "shopify_products_resource table does not exist"
+        assert db_cursor.fetchone()[0], "products table does not exist"
     
     def test_products_has_data(self, db_cursor):
         """Verify products table contains data."""
-        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.shopify_products_resource;")
+        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.products;")
         count = db_cursor.fetchone()[0]
-        assert count > 0, "shopify_products_resource table is empty"
+        assert count > 0, "products table is empty"
     
     def test_products_have_titles(self, db_cursor):
         """Verify all products have titles."""
         db_cursor.execute("""
-            SELECT COUNT(*) FROM shopify_raw.shopify_products_resource 
+            SELECT COUNT(*) FROM shopify_raw.products 
             WHERE title IS NULL OR TRIM(title) = '';
         """)
         null_count = db_cursor.fetchone()[0]
@@ -106,7 +106,7 @@ class TestShopifyProducts:
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
                 WHERE table_schema = 'shopify_raw' 
-                AND table_name = 'shopify_products_resource__variants'
+                AND table_name = 'products__variants'
             );
         """)
         assert db_cursor.fetchone()[0], "variants table does not exist"
@@ -115,7 +115,7 @@ class TestShopifyProducts:
         """Verify variant prices are non-negative."""
         db_cursor.execute("""
             SELECT COUNT(*) 
-            FROM shopify_raw.shopify_products_resource__variants
+            FROM shopify_raw.products__variants
             WHERE CAST(price AS NUMERIC) < 0;
         """)
         negative_count = db_cursor.fetchone()[0]
@@ -131,16 +131,16 @@ class TestShopifyCustomers:
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
                 WHERE table_schema = 'shopify_raw' 
-                AND table_name = 'shopify_customers_resource'
+                AND table_name = 'customers'
             );
         """)
-        assert db_cursor.fetchone()[0], "shopify_customers_resource table does not exist"
+        assert db_cursor.fetchone()[0], "customers table does not exist"
     
     def test_customers_has_data(self, db_cursor):
         """Verify customers table contains data."""
-        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.shopify_customers_resource;")
+        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.customers;")
         count = db_cursor.fetchone()[0]
-        assert count > 0, "shopify_customers_resource table is empty"
+        assert count > 0, "customers table is empty"
     
     def test_no_pii_columns(self, db_cursor):
         """Verify no PII columns exist (privacy check)."""
@@ -148,7 +148,7 @@ class TestShopifyCustomers:
             SELECT column_name 
             FROM information_schema.columns 
             WHERE table_schema = 'shopify_raw' 
-              AND table_name = 'shopify_customers_resource'
+              AND table_name = 'customers'
               AND column_name IN ('email', 'phone', 'first_name', 'last_name', 
                                   'default_address', 'addresses')
         """)
@@ -165,22 +165,22 @@ class TestShopifyInventory:
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
                 WHERE table_schema = 'shopify_raw' 
-                AND table_name = 'shopify_inventory_resource'
+                AND table_name = 'inventory'
             );
         """)
-        assert db_cursor.fetchone()[0], "shopify_inventory_resource table does not exist"
+        assert db_cursor.fetchone()[0], "inventory table does not exist"
     
     def test_inventory_has_data(self, db_cursor):
         """Verify inventory table contains data."""
-        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.shopify_inventory_resource;")
+        db_cursor.execute("SELECT COUNT(*) FROM shopify_raw.inventory;")
         count = db_cursor.fetchone()[0]
-        assert count > 0, "shopify_inventory_resource table is empty"
+        assert count > 0, "inventory table is empty"
     
     def test_inventory_reasonable_range(self, db_cursor):
         """Verify available quantities are within reasonable range."""
         # Allow negative for backorders, but check for extreme outliers
         db_cursor.execute("""
-            SELECT COUNT(*) FROM shopify_raw.shopify_inventory_resource 
+            SELECT COUNT(*) FROM shopify_raw.inventory 
             WHERE available < -10000 OR available > 1000000;
         """)
         extreme_count = db_cursor.fetchone()[0]
@@ -189,7 +189,7 @@ class TestShopifyInventory:
     def test_inventory_negative_count(self, db_cursor):
         """Document negative inventory (backorders are expected)."""
         db_cursor.execute("""
-            SELECT COUNT(*) FROM shopify_raw.shopify_inventory_resource 
+            SELECT COUNT(*) FROM shopify_raw.inventory 
             WHERE available < 0;
         """)
         negative_count = db_cursor.fetchone()[0]
@@ -204,7 +204,7 @@ class TestDataFreshness:
         """Verify orders data is recent (within 7 days)."""
         db_cursor.execute("""
             SELECT MAX(to_timestamp(_dlt_load_id::double precision)) as last_load
-            FROM shopify_raw.shopify_orders_resource;
+            FROM shopify_raw.orders;
         """)
         last_load = db_cursor.fetchone()[0]
         if last_load:
@@ -215,7 +215,7 @@ class TestDataFreshness:
         """Verify products data is recent (within 7 days)."""
         db_cursor.execute("""
             SELECT MAX(to_timestamp(_dlt_load_id::double precision)) as last_load
-            FROM shopify_raw.shopify_products_resource;
+            FROM shopify_raw.products;
         """)
         last_load = db_cursor.fetchone()[0]
         if last_load:

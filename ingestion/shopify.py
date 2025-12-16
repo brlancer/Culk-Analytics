@@ -29,7 +29,7 @@ from typing import AsyncGenerator, Optional, Dict, Any, List
 ORDERS_QUERY = """
 query getOrders($cursor: String, $query: String) {
   orders(
-    first: 100
+    first: 250
     after: $cursor
     query: $query
     sortKey: UPDATED_AT
@@ -124,7 +124,7 @@ query getOrders($cursor: String, $query: String) {
 PRODUCTS_QUERY = """
 query getProducts($cursor: String, $query: String) {
   products(
-    first: 100
+    first: 250
     after: $cursor
     query: $query
     sortKey: UPDATED_AT
@@ -142,7 +142,7 @@ query getProducts($cursor: String, $query: String) {
         publishedAt
         status
         tags
-        variants(first: 100) {
+        variants(first: 250) {
           edges {
             node {
               id
@@ -181,7 +181,7 @@ query getProducts($cursor: String, $query: String) {
 CUSTOMERS_QUERY = """
 query getCustomers($cursor: String, $query: String) {
   customers(
-    first: 100
+    first: 250
     after: $cursor
     query: $query
     sortKey: UPDATED_AT
@@ -212,14 +212,14 @@ query getCustomers($cursor: String, $query: String) {
 INVENTORY_QUERY = """
 query getInventoryLevels($cursor: String) {
   inventoryItems(
-    first: 100
+    first: 250
     after: $cursor
   ) {
     edges {
       node {
         id
         legacyResourceId
-        inventoryLevels(first: 10) {
+        inventoryLevels(first: 250) {
           edges {
             node {
               id
@@ -478,7 +478,7 @@ def flatten_inventory(inventory_data: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 @dlt.resource(write_disposition="merge", primary_key="id")
-async def shopify_orders_resource(
+async def orders(
     updated_at_min: str = "2024-01-01T00:00:00Z"
 ) -> AsyncGenerator[Dict[str, Any], None]:
     """
@@ -522,7 +522,7 @@ async def shopify_orders_resource(
 
 
 @dlt.resource(write_disposition="merge", primary_key="id")
-async def shopify_products_resource(
+async def products(
     updated_at_min: str = "2024-01-01T00:00:00Z"
 ) -> AsyncGenerator[Dict[str, Any], None]:
     """Extract products from Shopify GraphQL API."""
@@ -555,7 +555,7 @@ async def shopify_products_resource(
 
 
 @dlt.resource(write_disposition="merge", primary_key="id")
-async def shopify_customers_resource(
+async def customers(
     updated_at_min: str = "2024-01-01T00:00:00Z"
 ) -> AsyncGenerator[Dict[str, Any], None]:
     """Extract customers (anonymized) from Shopify GraphQL API."""
@@ -588,7 +588,7 @@ async def shopify_customers_resource(
 
 
 @dlt.resource(write_disposition="merge", primary_key=["inventory_item_id", "location_id"])
-async def shopify_inventory_resource() -> AsyncGenerator[Dict[str, Any], None]:
+async def inventory() -> AsyncGenerator[Dict[str, Any], None]:
     """Extract current inventory levels from Shopify GraphQL API."""
     cursor = None
     has_next_page = True
@@ -633,10 +633,10 @@ def shopify_source(
         updated_at_min = "2024-01-01T00:00:00Z"
     
     return [
-        shopify_orders_resource(updated_at_min),
-        shopify_products_resource(updated_at_min),
-        shopify_customers_resource(updated_at_min),
-        shopify_inventory_resource()
+        orders(updated_at_min),
+        products(updated_at_min),
+        customers(updated_at_min),
+        inventory()
     ]
 
 
