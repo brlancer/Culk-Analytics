@@ -274,29 +274,17 @@ pipeline.run(shiphero_source())
    - Read-only users for BI tools
    - Restrict access to `public` schema in production
 
-## Next Steps (Implementation Roadmap)
+## Future Scalability Considerations
 
-### Phase 1: Infrastructure ✅ (Current)
-- Project structure created
-- Database initialized
-- Configuration templates ready
+### Current Setup (Local PostgreSQL)
+- Suitable for small to medium data volumes (<1M rows/day)
+- Local development and testing
+- Single-machine processing
 
-### Phase 2: Extraction (In Progress)
-- Implement API extraction logic for each source
-- Test incremental loading
-- Monitor rate limits
-
-### Phase 3: Transformation
-- Build SQL views/tables in `staging` schema
-- Join data across sources
-- Create calculated fields
-
-### Phase 4: Analytics
-- Build dimensional models in `analytics` schema
-- Create business metrics (revenue, ROAS, inventory turnover)
-- Aggregate for reporting
-
-### Phase 5: Orchestration & Monitoring
-- Add scheduling (Airflow/Prefect)
-- Implement data quality checks
-- Set up alerting for pipeline failures
+### Future Growth Options
+- **Cloud Warehouse**: Migrate to Snowflake, BigQuery, or Redshift for better scale and performance
+- **Orchestration**: Add Airflow, Prefect, or Dagster for scheduling and dependency management
+- **dbt Integration**: Use dbt for SQL transformation layer with version control and testing
+- **Data Quality**: Add Great Expectations or Soda for automated validation
+- **Monitoring**: Add observability tools for data freshness, row counts, and anomaly detection
+- **Performance**: Implement partitioning, indexing strategies, and materialized views for large datasets

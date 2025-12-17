@@ -1,6 +1,20 @@
 # Culk Analytics
 
-An ELT (Extract-Load-Transform) data pipeline for apparel analytics, consolidating data from multiple sales channels, fulfillment, returns, advertising, and product master sources.
+**A Centralized Data Warehouse for E-commerce Operations**
+
+## Project Overview
+This is an ELT (Extract-Load-Transform) pipeline designed to consolidate data from a multi-channel apparel brand into a single source of truth.
+
+### The Business Problem
+Data for Culk is currently fragmented across distinct operational silos:
+* **Sales:** Shopify (DTC) & Faire (Wholesale)
+* **Logistics:** ShipHero (Inventory & Fulfillment)
+* **Returns:** Loop Returns
+* **Marketing:** Meta & Google Ads
+* **Master Data:** Airtable (Product attributes & COGS)
+
+### The Solution
+By ingesting these sources into PostgreSQL, we move beyond siloed CSV exports to enable complex SQL transformations. This allows for advanced analysis on critical metrics (e.g. SKU Level Contribution Margin).
 
 ## Tech Stack
 
@@ -105,6 +119,7 @@ culk-analytics/
 ├── .dlt/               # dlt configuration and secrets
 ├── logs/               # Runtime logs
 ├── docs/               # Project documentation
+├── tests/              # Data quality tests
 ├── requirements.txt    # Python dependencies
 ├── run_pipeline.py     # Main orchestration script
 └── README.md           # This file
@@ -117,14 +132,46 @@ culk-analytics/
 3. Build SQL transformations in `staging` and `analytics` schemas
 4. Orchestrate full pipeline runs via `run_pipeline.py`
 
-## Next Steps (Phase 2+)
+## Implementation Status
 
-- [ ] Implement API extraction logic for each source
-- [ ] Add incremental loading strategies (state management)
-- [ ] Build SQL transformation layer (staging → analytics)
-- [ ] Add data quality checks and testing
-- [ ] Implement scheduling (cron/Airflow/Prefect)
-- [ ] Add monitoring and alerting
+### Phase 1: Infrastructure ✅ COMPLETE
+- ✅ Project structure created
+- ✅ Database initialized (PostgreSQL with 3-layer schema)
+- ✅ Configuration templates ready (.dlt/secrets.toml.example, config.toml.example)
+- ✅ Python dependencies defined (requirements.txt)
+- ✅ Testing framework configured (pytest with shared fixtures)
+
+### Phase 2: Data Extraction ⏳ IN PROGRESS
+**Completed Sources:**
+- ✅ **Shopify** (B2B + DTC commerce hub) - Custom GraphQL with cost monitoring, 4 resources (orders, products, customers, inventory)
+- ✅ **Faire** (Wholesale orders) - dlt REST API client with dual auth headers, 2 resources with auto-nested normalization
+- ✅ **ShipHero** (3PL fulfillment) - Custom GraphQL with complexity monitoring, 2 resources (products, orders)
+
+**Remaining Sources:**
+- 🗓️ Loop Returns (return tracking)
+- 🗓️ Meta/Facebook Ads (ad spend & performance)
+- 🗓️ Google Ads (ad spend & performance)
+- 🗓️ Airtable (product master data)
+
+### Phase 3: SQL Transformations 🗓️ TODO
+- Build SQL views/tables in `staging` schema
+- Join data across sources (e.g., Shopify orders + ShipHero shipments)
+- Create calculated fields (margins, ROAS, inventory turnover)
+- Build dimensional models in `analytics` schema
+- Create business metrics and aggregations
+
+### Phase 4: Orchestration & Monitoring 🗓️ TODO
+- Add scheduling (Airflow/Prefect/Dagster)
+- Implement data quality checks (Great Expectations or Soda)
+- Set up alerting for pipeline failures
+- Add monitoring for data freshness and row counts
+
+### Phase 5: Production Readiness 🗓️ TODO
+- Migrate to cloud warehouse (Snowflake/BigQuery/Redshift) - optional
+- Implement secrets management (AWS Secrets Manager/HashiCorp Vault)
+- Add read-only users for BI tools
+- Configure connection pooling and performance tuning
+- Implement data retention policies
 
 ## Resources
 

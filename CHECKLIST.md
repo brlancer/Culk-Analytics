@@ -11,7 +11,7 @@
 ✅ Add requirements.txt with dependencies
 ✅ Create main orchestration script (run_pipeline.py)
 
-## Phase 2: Data Extraction Implementation ⏳ TODO
+## Phase 2: Data Extraction Implementation ⏳ IN PROGRESS (3 of 7 sources complete)
 
 ### Shopify (Core Commerce: B2B + DTC)
 ✅ Configure dlt REST API source for Shopify
@@ -37,14 +37,16 @@
 Note: Simplified implementation using dlt REST API client with automatic nested table normalization (no custom transformers needed). Creates 5+ tables: orders, orders__items, orders__shipments, products, products__variants, etc.
 
 ### ShipHero (3PL)
-🗓️ Write GraphQL queries for products (inventory)
-🗓️ Write GraphQL queries for shipments
-🗓️ Implement async extraction with aiohttp
-🗓️ Parse nested GraphQL response (edges/nodes)
-🗓️ Flatten data structures for dlt
-🗓️ Implement complexity monitoring
-🗓️ Add OAuth token refresh logic
-🗓️ Test full pipeline
+✅ Write GraphQL queries for products (inventory)
+✅ Write GraphQL queries for orders (shipments/fulfillment data)
+✅ Implement async extraction with aiohttp
+✅ Parse nested GraphQL response (edges/nodes)
+✅ Flatten data structures for dlt
+✅ Implement complexity monitoring
+✅ Test full pipeline
+✅ **COMPLETE** - See docs/implementation/shiphero_checklist.md for details
+
+Note: OAuth token refresh flow deferred to production phase. Current implementation uses bearer token with complexity-based rate limiting and adaptive delays.
 
 ### Loop Returns
 🗓️ Configure dlt REST API source for Loop
@@ -80,11 +82,12 @@ Note: Simplified implementation using dlt REST API client with automatic nested 
 🗓️ Test full pipeline
 
 ### Cross-Source
-🗓️ Update run_pipeline.py to call all extraction functions
-🗓️ Add logging for each source
-🗓️ Implement error handling (continue on failure)
-🗓️ Test orchestration of all sources
-🗓️ Verify data in PostgreSQL public schema
+✅ Update run_pipeline.py to call implemented extraction functions (Shopify, Faire, ShipHero)
+✅ Add logging for each source
+✅ Implement error handling (continue on failure)
+🗓️ Test orchestration of implemented sources
+🗓️ Verify data in PostgreSQL schemas (shopify_raw, faire_raw, shiphero_raw)
+🗓️ Add remaining sources when implemented (Loop, Meta Ads, Google Ads, Airtable)
 
 ## Phase 3: SQL Transformations ⏳ TODO
 

@@ -17,13 +17,13 @@ culk-analytics/
 │   ├── ARCHITECTURE.md        # ELT architecture overview
 │   └── DATA_SOURCES.md        # API details and rate limits
 ├── 📂 ingestion/               # Data source extraction scripts
-│   ├── shopify.py             # Shopify commerce hub (B2B + DTC) (REST)
-│   ├── faire.py               # Faire wholesale (REST)
-│   ├── shiphero.py            # ShipHero 3PL (GraphQL)
-│   ├── loop_returns.py        # Loop Returns (REST)
-│   ├── meta_ads.py            # Meta/Facebook Ads (Graph API)
-│   ├── google_ads.py          # Google Ads (REST)
-│   └── airtable.py            # Airtable product master (REST)
+│   ├── shopify.py             # ✅ Shopify commerce hub (B2B + DTC) (GraphQL)
+│   ├── faire.py               # ✅ Faire wholesale (REST)
+│   ├── shiphero.py            # ✅ ShipHero 3PL (GraphQL)
+│   ├── loop_returns.py        # 🗓️ Loop Returns (REST)
+│   ├── meta_ads.py            # 🗓️ Meta/Facebook Ads (Graph API)
+│   ├── google_ads.py          # 🗓️ Google Ads (REST)
+│   └── airtable.py            # 🗓️ Airtable product master (REST)
 ├── 📂 logs/                    # Runtime logs (empty, git tracked)
 │   └── .gitkeep
 ├── .gitignore                  # Excludes secrets, logs, cache
@@ -61,15 +61,15 @@ python run_pipeline.py
 
 ## 📊 Data Sources (7 Total)
 
-| Source | Type | File |
-|--------|------|------|
-| Shopify (Commerce Hub: B2B + DTC) | REST | `ingestion/shopify.py` |
-| Faire (Wholesale) | REST | `ingestion/faire.py` |
-| ShipHero (3PL) | GraphQL | `ingestion/shiphero.py` |
-| Loop Returns | REST | `ingestion/loop_returns.py` |
-| Meta Ads | Graph API | `ingestion/meta_ads.py` |
-| Google Ads | REST | `ingestion/google_ads.py` |
-| Airtable (Product) | REST | `ingestion/airtable.py` |
+| Source | Type | File | Status |
+|--------|------|------|--------|
+| Shopify (Commerce Hub: B2B + DTC) | GraphQL | `ingestion/shopify.py` | ✅ Complete |
+| Faire (Wholesale) | REST | `ingestion/faire.py` | ✅ Complete |
+| ShipHero (3PL) | GraphQL | `ingestion/shiphero.py` | ✅ Complete |
+| Loop Returns | REST | `ingestion/loop_returns.py` | 🗓️ TODO |
+| Meta Ads | Graph API | `ingestion/meta_ads.py` | 🗓️ TODO |
+| Google Ads | REST | `ingestion/google_ads.py` | 🗓️ TODO |
+| Airtable (Product) | REST | `ingestion/airtable.py` | 🗓️ TODO |
 
 ## 🗄️ Database Schemas
 
@@ -77,22 +77,27 @@ python run_pipeline.py
 - **`staging`**: Intermediate transformations (future)
 - **`analytics`**: Final business metrics (future)
 
-## 📝 What's Implemented (Phase 1)
+## 📝 What's Implemented
 
 ✅ Complete project structure  
 ✅ Database initialization scripts  
 ✅ Configuration templates  
-✅ Python extraction file skeletons  
+✅ Python extraction files with dlt pipelines
+✅ **Shopify extraction** - Custom GraphQL with 4 resources (orders, products, customers, inventory)
+✅ **Faire extraction** - dlt REST API client with auto-nested normalization
+✅ **ShipHero extraction** - Custom GraphQL with complexity monitoring
+✅ Testing framework with pytest (Shopify, Faire tests passing)
 ✅ Comprehensive documentation  
 ✅ .gitignore for secrets protection  
 
-## 🔧 What's Next (Phase 2+)
+## 🔧 What's Next
 
-⏳ Implement API extraction logic  
-⏳ Build SQL transformations  
-⏳ Add data quality checks  
-⏳ Set up orchestration/scheduling  
-⏳ Add monitoring and alerting  
+🗓️ Complete remaining data sources (Loop, Meta Ads, Google Ads, Airtable)
+🗓️ Build SQL transformation layer (staging → analytics)
+🗓️ Add ShipHero tests (test_shiphero.py)
+🗓️ Add data quality checks for all sources
+🗓️ Set up orchestration/scheduling (Airflow/Prefect)
+🗓️ Add monitoring and alerting  
 
 ## 📚 Key Documentation
 

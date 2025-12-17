@@ -1,7 +1,7 @@
 # Faire Wholesale - Implementation Checklist
 
 **Status:** ✅ COMPLETE - All tests passing
-**Last Updated:** 2025-12-15
+**Last Updated:** 2025-12-17
 **Lead Developer:** brianlance
 
 ## Implementation Summary
@@ -36,7 +36,8 @@ Built a simplified dlt REST API-based Faire ingestion using dlt's automatic nest
 ✅ dlt auto-creates child tables: orders__items, orders__shipments
 ✅ Test orders extraction end-to-end (pytest passing)
 ✅ Verify data integrity (foreign keys, item counts, timestamps)
-❌ Incremental loading filters not implemented (loads all orders, relies on merge)
+✅ Incremental loading filters implemented (filters on updated_at_min, queried from psql)
+⚠️ Known issue: Faire API returns excess orders on updated_at_min filter
 
 ### Products Extraction:
 ✅ Configure products resource with cursor pagination (50 items/page)
@@ -45,7 +46,7 @@ Built a simplified dlt REST API-based Faire ingestion using dlt's automatic nest
 ✅ dlt auto-creates child tables: products__variants, products__taxonomy_type, etc.
 ✅ Test products extraction end-to-end (pytest passing)
 ✅ Verify data integrity (valid states, ID formats)
-❌ Image exclusion not implemented (API returns all fields)
+❌ Image exclusion not implemented (API returns all fields, images are just URL strings)
 ❌ Field filtering not implemented (simpler to accept all fields)
 
 ### Data Normalization:
@@ -107,7 +108,7 @@ Built a simplified dlt REST API-based Faire ingestion using dlt's automatic nest
 
 ### Next Steps (Future Enhancements):
 ✅ COMPLETE - All core functionality working
-🔮 Add incremental loading filters for orders (updated_at_min parameter)
+✅ Add incremental loading filters for orders (updated_at_min parameter)
 🔮 Implement rate limiting/request throttling for large datasets
 🔮 Add detailed logging (orders fetched, products processed, API calls made)
 🔮 Add request counter and monitoring
