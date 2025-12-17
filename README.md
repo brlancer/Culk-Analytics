@@ -32,7 +32,8 @@ graph LR
         F[Faire]
         SH[ShipHero]
         L[Loop]
-        M[Marketing APIs]
+        M[Meta Ads]
+        G[Google Ads]
     end
 
     subgraph "Ingestion (dlt)"
@@ -50,6 +51,7 @@ graph LR
     SH --> Py
     L --> Py
     M --> Py
+    G --> Py
 
     Py --> Raw
     Raw --> Stg
