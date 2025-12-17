@@ -25,12 +25,6 @@ By ingesting these sources into PostgreSQL, we move beyond siloed CSV exports to
 
 ## ELT Architecture Overview
 
-This project follows the **ELT pattern**:
-
-1. **Extract**: Python scripts in `ingestion/` fetch raw data from various APIs (REST, GraphQL)
-2. **Load**: `dlt` library handles schema inference, normalization, and loading to PostgreSQL `public` schema
-3. **Transform**: (Future) SQL views/materialized tables in `staging` and `analytics` schemas for business logic
-
 ```mermaid
 graph LR
     subgraph "Sources (Extract)"
@@ -61,6 +55,12 @@ graph LR
     Raw --> Stg
     Stg --> Anl
 ```
+
+This project follows the **ELT pattern**:
+
+1. **Extract**: Python scripts in `ingestion/` fetch raw data from various APIs (REST, GraphQL)
+2. **Load**: `dlt` library handles schema inference, normalization, and loading to PostgreSQL `public` schema
+3. **Transform**: (Future) SQL views/materialized tables in `staging` and `analytics` schemas for business logic
 
 ### Why ELT?
 - Load raw data first, transform later in SQL (closer to the data)
