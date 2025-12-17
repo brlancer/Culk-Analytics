@@ -31,6 +31,35 @@ This project follows the **ELT pattern**:
 2. **Load**: `dlt` library handles schema inference, normalization, and loading to PostgreSQL `public` schema
 3. **Transform**: (Future) SQL views/materialized tables in `staging` and `analytics` schemas for business logic
 
+graph LR
+    subgraph "Sources (Extract)"
+        S[Shopify]
+        F[Faire]
+        SH[ShipHero]
+        L[Loop]
+        M[Marketing APIs]
+    end
+
+    subgraph "Ingestion (dlt)"
+        Py[Python/dlt Scripts]
+    end
+
+    subgraph "Warehouse (Postgres)"
+        Raw[(Public Schema<br/>Raw Data)]
+        Stg[(Staging Schema<br/>Cleaned)]
+        Anl[(Analytics Schema<br/>Metrics)]
+    end
+
+    S --> Py
+    F --> Py
+    SH --> Py
+    L --> Py
+    M --> Py
+
+    Py --> Raw
+    Raw --> Stg
+    Stg --> Anl
+
 ### Why ELT?
 - Load raw data first, transform later in SQL (closer to the data)
 - dlt automates schema evolution and handles API pagination/state
