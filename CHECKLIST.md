@@ -11,7 +11,7 @@
 ✅ Add requirements.txt with dependencies
 ✅ Create main orchestration script (run_pipeline.py)
 
-## Phase 2: Data Extraction Implementation ⏳ IN PROGRESS (3 of 7 sources complete)
+## Phase 2: Data Extraction Implementation ⏳ IN PROGRESS (4 of 7 sources complete)
 
 ### Shopify (Core Commerce: B2B + DTC)
 ✅ Configure dlt REST API source for Shopify
@@ -49,12 +49,17 @@ Note: Simplified implementation using dlt REST API client with automatic nested 
 Note: OAuth token refresh flow deferred to production phase. Current implementation uses bearer token with complexity-based rate limiting and adaptive delays.
 
 ### Loop Returns
-🗓️ Configure dlt REST API source for Loop
-🗓️ Implement incremental loading
-🗓️ Test extraction for returns endpoint
-🗓️ Handle pagination
-🗓️ Add error handling and retries
-🗓️ Test full pipeline
+✅ Configure dlt REST API source for Loop
+✅ Implement incremental loading
+✅ Test extraction for returns endpoint
+✅ Handle pagination (URL-based with nextPageUrl)
+✅ Implement 100-day date chunking (respects 120-day API limit)
+✅ Add PII sanitization (removes customer emails, addresses, tracking URLs)
+✅ Add error handling and retries
+✅ Test full pipeline with pytest test_loop_returns.py
+✅ **COMPLETE** - All tests passing, data loading successfully into loop_returns_raw schema
+
+Note: Simplified implementation using custom request handling with dlt automatic nested table normalization. Creates 6 tables: returns, returns__line_items, returns__exchanges, returns__labels, returns__labels__line_items, returns__shopify_refund_object. PII sanitization removes customer emails, addresses, phone numbers, and tracking URLs before database load.
 
 ### Meta/Facebook Ads
 🗓️ Build API requests for Insights endpoint
