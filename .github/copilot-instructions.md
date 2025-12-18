@@ -9,6 +9,32 @@ Apparel analytics ELT data pipeline consolidating B2B/DTC commerce, 3PL fulfillm
 - **aiohttp/requests**: Async API extraction (GraphQL/REST)
 - **pytest**: Data quality tests with shared fixtures in `tests/conftest.py`
 
+## Code Philosophy: Startup MVP, Not Enterprise
+
+**CRITICAL**: This is a small apparel brand analytics pipeline, not a Fortune 500 data platform. Prioritize:
+- ✅ **Simplicity over robustness**: Straightforward code beats defensive programming
+- ✅ **Fail-fast over graceful degradation**: Clear error messages > complex retry logic
+- ✅ **Manual intervention over automation**: If something breaks once/month, manual fix is fine
+- ✅ **Minimal abstractions**: Avoid classes, interfaces, factory patterns unless truly needed
+- ✅ **Practical logging**: 3-4 key log statements, not 20+ verbose status updates
+
+### What NOT to Add Unless Explicitly Requested
+- ❌ Extensive try-except blocks (1-2 max per function)
+- ❌ Complex error handling for edge cases that may never happen
+- ❌ Defensive null checks for predictable data structures
+- ❌ Elaborate logging with emojis, banners, or multi-line instructions
+- ❌ Interactive CLI interfaces for library functions
+- ❌ "Enterprise best practices" like circuit breakers, sophisticated retry strategies, health checks
+
+### When to Add Complexity
+**Only add complexity if:**
+1. User explicitly requests it
+2. Rate limits/API constraints require it (e.g., Shopify cost monitoring)
+3. Data loss would occur without it (e.g., pagination cursors)
+4. You've seen the failure happen in testing
+
+**Example**: ShipHero tokens expire every 28 days. With hourly pipeline runs, that's 672 executions before manual refresh is needed. A simple token refresh function is sufficient—no need for proactive monitoring, automated alerts, or fallback strategies.
+
 ## Critical Workflows
 
 ### Database Initialization
@@ -99,6 +125,7 @@ Tests in `tests/` validate loaded data in PostgreSQL:
 3. **Flatten Before Load**: GraphQL nested structures (edges/nodes) must be flattened to dicts before yielding to dlt.
 4. **Test After Changes**: Run source-specific tests (`pytest tests/test_shopify.py`) after modifying ingestion logic.
 5. **SQL Transforms**: NOT in `database/`—create separate `transforms/` directory when building staging/analytics SQL.
+6. **Keep It Simple**: If you're writing more than 100 lines for a utility function, you're probably over-engineering it.
 
 ## Common Pitfalls
 - ❌ Adding table DDL to `database/02_create_schemas.sql`—dlt creates tables automatically
@@ -106,6 +133,7 @@ Tests in `tests/` validate loaded data in PostgreSQL:
 - ❌ Not flattening GraphQL responses—dlt can't handle deeply nested structures well
 - ❌ Ignoring rate limit response headers—leads to 429 errors and pipeline failures
 - ❌ Hardcoding credentials instead of using dlt secrets (`dlt.secrets["sources.shopify.access_token"]`)
+- ❌ **Over-engineering simple utilities with excessive error handling, logging, or defensive programming**
 
 ## Key Files to Reference
 - [ingestion/shopify.py](ingestion/shopify.py): Complete GraphQL extraction pattern with flattening, pagination, cost monitoring
